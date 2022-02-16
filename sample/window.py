@@ -1,43 +1,88 @@
-from tkinter import Tk, Label, Button
-from wordle import returncheckOnline, returngottenOnline, defaultwords
-import time
+from tkinter import Tk, Label, Button, StringVar
 
-class tkintergui:
-    def __init__(self,window):
+class tkWindow:
+    def __init__ (
+        self, 
+        xlen:int, 
+        ylen:int, 
+        bgvar="black"
+        ):
+        window = Tk()
         self.window = window
-        window.title("Fake Wordle")
-        window.geometry("800x800")
-        window.configure(bg="black")
+        self.window.configure(bg=bgvar)
+        self.window.geometry("{}.{}".format(str(xlen), str(ylen)))
         self.labels = {}
-    def addlabel(self, labelname:str, labeltext: str, size:int, fontfamily : str = "Courier", padx:int = 0, pady:int = 0):
-        self.labels[labelname] = Label(self.window, text=labeltext, font = (fontfamily, size))
-        self.labels[labelname].pack(padx = padx, pady = pady)
+        self.texts = {}
+        self.buttons = {}
+        print("Tkwindow created")
+    def mainloop (self):
+        print("Began mainloop")
+        self.window.mainloop()
+    def addLabel(
+        self, 
+        name:str, 
+        labeltext:str, 
+        size:int, 
+        fontfamily:str = "Courier", 
+        bgcolour = "black",
+        colour = "white",
+        padx:int = 0, 
+        pady:int = 0
+        ):
+        self.texts[name] = StringVar()
+        self.texts[name].set(labeltext)
+        self.labels[name] = Label(
+            self.window, 
+            textvariable=self.texts[name], 
+            font=(fontfamily,size), 
+            bg = bgcolour, 
+            fg = colour)
+        self.labels[name].pack(padx = padx, pady = pady)
+        print("Created Label {} with string {}".format(name, labeltext))
+    def returnLabelList (self):
+        return self.labels
+    def editLabel(self, name:str, text:str):
+        self.texts[name].set(text)
+        print("Edited Text {}".format(name))
+    def deleteLabel(self, name:str):
+        self.labels[name].destroy()
+        print("Delted Label {}".format(name))
+    def addButton(
+        self, 
+        name:str, 
+        buttontext:str, 
+        size:int, 
+        func,
+        fontfamily:str = "Courier", 
+        colour:str = "black", 
+        bgcolour:str = "white", 
+        padx:int = 0, 
+        pady:int = 0
+        ):
+        self.texts[name + "button"] = StringVar()
+        self.texts[name + "button"].set(buttontext)
+        self.buttons[name] = Button(
+            self.window, 
+            textvariable= self.texts[name + "button"], 
+            font = (fontfamily, size), 
+            fg=colour, 
+            bg=bgcolour, 
+            command=func)
+        self.buttons[name].pack(padx = padx, pady = pady)
+    def killLoop (self):
+        self.window.destroy()
+        print("Killed Loop")
+    def listOfVars (self):
+        return str(self.texts)
 
-def loadinglabel (guiname, root):
-    guiname.addlabel("Loading Label", "Loading Online set of 5 - Letter Words...", 20, pady=(100,0))
-    timeoutcounter = 0
-    window.update_idletasks()
-
-    while not returncheckOnline or timeoutcounter > 10:
-        time.sleep(1)
-        timeoutcounter += 1
-    guiname.labels["Loading Label"].after(1000, guiname.labels["Loading Label"].destroy())
-    window.update_idletasks()
-    if returngottenOnline():
-        guiname.addlabel("Loading Label", "Loaded Online Repo of Words", 20, pady=(100,0))
-        window.update_idletasks()
-    else:
-        guiname.addlabel("Loading Label", "Couldn't find Online Repo", 20, pady=(100,0))
-        guiname.addlabel("Test", defaultwords[0], 20, pady=(10,0))
-        window.update_idletasks()
 
 
-window = Tk()
-gui = tkintergui(window)
-gui.addlabel("title","Fake Wordle", 50, pady = 100)
-
-
-
-# mainloop
-window.mainloop()
-loadinglabel(gui, window)
+startpage = tkWindow()
+startpage.addLabel("title","Fake Wordle", 50, pady = 100)
+startpage.addLabel("Loading Label", "", 20, pady=(100,0))
+if (returnonline()):
+    startpage.editLabel("Loading Label", "Online")
+else:
+    startpage.editLabel("Loading Label", "Failed to Connect Online")
+startpage.addButton("Start", "Start Game", 25, killLogin, pady=(30, 0))
+startpage.mainloop()
