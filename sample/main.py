@@ -1,4 +1,4 @@
-from sample.window import tkWindow
+from window import tkWindow
 from wordle import wordlerepo, game
 import window
 from tkinter import StringVar
@@ -32,9 +32,17 @@ def main ():
         mainpage.createGrid("Mainpage-Maingrid")
         mainpage.createGrid("WordDisplay", "Mainpage-Maingrid")
         for i in range(25):
-            mainpage.addLabeltoGrid("WordDisplay", "wordle-" + str(i), " ", 10, i%5, i//5, bgcolour="white", padx= 10, pady = 10, width=5, height=5)
-        mainpage.addEntrytoGrid("Mainpage-Maingrid", "WordleAttempt", "", 20, 0, 1, bgcolour="white", colour="black")
-        mainpage.addButtontoGrid("Mainpage-Maingrid", "WordleSubmit", "Submit Guess", 20, 0, 2)
+            mainpage.addLabeltoGrid("WordDisplay", "wordle-" + str(i), " ", 10, i%5, i//5, bgcolour="white", colour="black", padx= 10, pady = 10, width=5, height=5)
+        mainpage.addEntrytoGrid("Mainpage-Maingrid", "WordleAttempt", "aroma", 20, 0, 1, bgcolour="white", colour="black")
+        mainpage.addButtontoGrid(
+            "Mainpage-Maingrid", 
+            "WordleSubmit", 
+            "Submit Guess", 
+            20, 0, 2, 
+            guessrunner(mainpage.texts["WordleAttempt_entry"], session, mainpage, "wordle-0", "wordle-1", "worlde-2", "wordle-3", "worlde-4"), 
+            padx=(10,0))
+        # mainpage.editLabel("wordle-0", "L")
+        # mainpage.editButtonColour("wordle-0", "yellow")
         mainpage.mainloop()
 
 main()

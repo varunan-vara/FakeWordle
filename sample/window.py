@@ -177,8 +177,11 @@ class tkWindow:
             bg=bgcolour, 
             command=executfunc)
         self.buttons[name].pack(padx = padx, pady = pady)
+    def editButtonColour (self, name:str, newcolour:str):
+        self.labels[name].config(bg=newcolour)
     def killLoop (self):
         self.window.destroy()
         print("Killed Loop")
     def listOfVars (self):
-        return str(self.texts)
+        returnlist = [item for item in self.texts]
+        return str(returnlist)
