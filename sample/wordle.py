@@ -25,16 +25,19 @@ class wordlerepo:
         return self.online
     def randword (self, num:int = None):
         if num == None:
-            num = random.randint(0,(len(defaultwords) - 1))
+            num = random.randint(0,(len(self.wordlelist) - 1))
         return self.wordlelist[num]
+    def returnlist (self):
+        return self.wordlelist
 
 class game:
-    def __init__ (self, correct, checkIfReal = True, readableoutput = False):
+    def __init__ (self, correct, deflist: list, checkIfReal = True, readableoutput = False):
         self.correct = correct
         self.tries = 0
         self.attempts = []
         self.won = False
         self.real = checkIfReal
+        self.deflist = deflist
         if readableoutput:
             self.errors = ["Already won game!", "No more attempts allowed!"]
         else:
@@ -59,8 +62,8 @@ class game:
     def attemptstore (self, attemptword, score):
         result = {"word": attemptword, "score": score}
         self.attempts.append(result)
-    def play (self, response:str, totallist:list):
-        self.isReal(response,totallist)
+    def play (self, response:str):
+        self.isReal(response,self.deflist)
         if self.won:
             return self.errors[0]
         if self.tries >= 5:
